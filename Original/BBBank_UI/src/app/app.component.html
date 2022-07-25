@@ -1,0 +1,26 @@
+<div class="container-fluid">
+  <app-toolbar></app-toolbar>
+</div>
+  <div class="row">
+    <div class="col-12">
+      <div class="card card-user">
+        <div class="card-body">
+          <div class="author">
+            <div class="block block-one"></div>
+            <div class="block block-two"></div>
+            <div class="block block-three"></div>
+            <div class="block block-four"></div>
+            <input hidden #fileInput type="file" id="file" (change)="save(fileInput.files)" />
+            <!-- all the elements in the form are two way binded to a property called account of type Account.  -->
+            <div class="avatar-cont">
+              <img id="photo" alt="..." class="avatar"  src="{{profilePicUrl}}" />
+              <a href="javascript:void(0)"(click)="fileInput.click()" class="btn-change-avatar"><i class="fas fa-camera"></i></a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<router-outlet></router-outlet>
+
