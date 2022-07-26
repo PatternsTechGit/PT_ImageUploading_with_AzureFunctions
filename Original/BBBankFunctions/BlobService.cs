@@ -20,9 +20,13 @@ namespace BBBankFunctions
 
         public async Task<Uri> UploadFileBlobAsync(string blobContainerName, Stream content, string contentType, string fileName)
         {
+            // Get refrence of the container 
             var containerClient = GetContainerClient(blobContainerName);
+            // create a space for a file in the container.
             var blobClient = containerClient.GetBlobClient(fileName);
+            // upload the bytes of the file in that space
             await blobClient.UploadAsync(content, new BlobHttpHeaders { ContentType = contentType });
+            // retutrns the URI  of the file create.
             return blobClient.Uri;
         }
 
