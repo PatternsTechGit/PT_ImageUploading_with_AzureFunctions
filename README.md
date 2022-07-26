@@ -121,9 +121,13 @@ After creating the `blobclient` it will upload the image stream and returns the 
 
         public async Task<Uri> UploadFileBlobAsync(string blobContainerName, Stream content, string contentType, string fileName)
         {
+            // Get reference of the container 
             var containerClient = GetContainerClient(blobContainerName);
+            // create a space for a file in the container.
             var blobClient = containerClient.GetBlobClient(fileName);
+            // upload the bytes of the file in that space
             await blobClient.UploadAsync(content, new BlobHttpHeaders { ContentType = contentType });
+            // returns the URI  of the file create.
             return blobClient.Uri;
         }
 
@@ -156,14 +160,18 @@ Create a new class `Startup` and inherit it with `FunctionsStartup` class so tha
 Also we will read the connection string from configuration file.
 
 ```cs
+// marking this file as a startup file
 [assembly: FunctionsStartup(typeof(BBBankFunctions.Startup))]
 namespace BBBankFunctions
 {
+    //FunctionsStartup is part of Dependency Injection  Nuget
     public class Startup : FunctionsStartup
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
+            //Dependency Injecting BlobServiceClient
             builder.Services.AddScoped(x => new BlobServiceClient(Environment.GetEnvironmentVariable("BlobConnection")));
+            // Dependency injection custom BlobService class that handles blob interactions. 
             builder.Services.AddScoped<IBlobService, BlobService>();
         }
     }
@@ -179,7 +187,7 @@ In function we will get the received file from `HttpRequest` object and then wil
 Here is the code as below : 
 
 ```cs
-  public class UploadImageAndGetUrl
+     public class UploadImageAndGetUrl
     {
         IBlobService blobService;
         IConfiguration configuration;
@@ -193,25 +201,29 @@ Here is the code as below :
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,ILogger log)
         {
             string fileName = String.Empty;
+            Uri uri;
             try
             {
                 log.LogInformation("C# HTTP trigger function processed a request.");
+                // picking up the first file sent to the function and is accessed through request's Form object
                 var file = req.Form.Files[0];
+                // creating a random file name
                 fileName = Guid.NewGuid().ToString() + ".jpg";
                 using (var ms = new MemoryStream())
                 {
-
+                    // copying incoming bytes into stream
                     file.CopyTo(ms);
                     ms.Position = 0;
-                    await blobService.UploadFileBlobAsync(configuration.GetValue<string>("ContainerName"), ms, "", fileName);
+                    // sending a stream for uploading. 
+                    uri = await blobService.UploadFileBlobAsync(configuration.GetValue<string>("ContainerName"), ms, "", fileName);
                 }
             }
              catch (Exception ex)
             {
                 return new StatusCodeResult(500);
             }
-            String fullPath = "https://bbbank.blob.core.windows.net/profilepics/" + fileName;
-            return new OkObjectResult(new FullPathResponse() {  FullPath = fullPath });
+            // returning the url 
+            return new OkObjectResult(new FullPathResponse() {  FullPath = uri.AbsoluteUri });
 
         }
     }
