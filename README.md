@@ -490,4 +490,4 @@ a.btn-change-avatar {
 # Final Output
 Run the application and see its working as below :
 
-![Image Upload video](https://user-images.githubusercontent.com/100709775/181068961-3d9d53cc-4ae2-4bb1-b9b7-16741309dc9b.gif)
+![Image-Upload-video](https://user-images.githubusercontent.com/100709775/182832665-bc2fe831-83f7-4738-815c-f063651bc4b2.gif)
