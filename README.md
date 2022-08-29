@@ -5,12 +5,12 @@
 
 Blob storage is designed for:
 
-* Serving images or documents directly to a browser.
-* Storing files for distributed access.
-* Streaming video and audio.
-* Writing to log files.
-* Storing data for backup and restore, disaster recovery, and archiving.
-* Storing data for analysis by an on-premises or Azure-hosted service.
+* **Serving images** or **documents** directly to a browser.
+* **Storing files** for distributed access.
+* **Streaming** video and audio.
+* **Writing** to log files.
+* **Storing data** for **backup** and **restore, disaster recovery**, and **archiving**.
+* **Storing data** for analysis by an on-premises or Azure-hosted service.
 
 ## What Azure Function ?
 [Azure functions](https://docs.microsoft.com/en-us/azure/azure-functions/functions-overview) is a serverless concept of cloud native design that allows a piece of code deployed and execute without any need of server infrastructure, web server, or any configurations.
@@ -40,7 +40,7 @@ Previously, we scaffolded a new Angular application in which we have
  * We will create an **HTTP Azure function** in Asp.Net Core.
  * We will implement Image upload functionality in Angular.
 
-
+-----------
  Here are the steps to begin with :
 
 # Cloud Side Configuration
@@ -48,46 +48,49 @@ Previously, we scaffolded a new Angular application in which we have
 ## Step 1: Create Azure Storage Account
 To create a new storage account go to [Azure Portal](https://portal.azure.com/#home) and click **Create a resource**. search `Storage Account' and click **Create** button. 
 
-Enter the relevant details and click `Review + Create` button as below :
+Enter the relevant details and click **Review + Create** button as below :
 ![1](https://user-images.githubusercontent.com/100709775/180192138-43566992-44eb-4da1-8849-6d0eb8217d45.PNG)
 
+--------
 
 ## Step 2:  Create Container in Storage Account
-To create a new container in storage account click on `Containers` option from left menu and then click Add container button. Enter the name and select **Blob (anonymous read access for blobs only)** option in Public access level as below : 
+To create a new container in storage account click on **Containers** option from left menu and then click **Add container** button. Enter the name and select **Blob (anonymous read access for blobs only)** option in Public access level as below : 
+
+-------------
 
 ![2](https://user-images.githubusercontent.com/100709775/180192855-d6d26267-0685-4bee-84fe-b4525d71e8b8.PNG)
 
 ## Step 3:  Get Storage Account Connection String
 
-Our Azure Function will require the connection string of storage account to upload the images to get the connection string click on the `Access Keys` option from left menu and copy the connection string.
+Our Azure Function will require the connection string of storage account to upload the images to get the connection string click on the **Access Keys** option from left menu and **copy** the connection string.
 
 ![3](https://user-images.githubusercontent.com/100709775/180194276-00e35d11-affe-4a4a-8327-3961e61bc9cc.PNG)
 
-
+----------------
 # Server Side Implementation
 
 ## Step 1: Create new Azure Function Application
-To create a new Azure function create a new `Azure Function` project in Visual Studio as below : 
+To create a new Azure function create a new **Azure Function** project in Visual Studio as below : 
 
 ![4](https://user-images.githubusercontent.com/100709775/180195435-3af3a799-812f-4fc0-adcf-a39ef1bfbfa5.PNG)
 
-Click next and then select `Http Trigger` template and click create button as below :
+Click next and then select **Http Trigger** template and click create button as below. This trigger gets fired when the HTTP request comes.
 
 ![5](https://user-images.githubusercontent.com/100709775/180195445-90aaccf9-3ff7-4082-b57a-7a6efd4fec72.PNG)
 
 
-Install the required Azure nugets using commands in package console manager
+Install the required **Azure nuget** using commands in package console manager
 
+```powershell
+    Install-Package Azure.Storage.Blobs -Version 12.13.0
+    Install-Package Microsoft.Azure.Functions.Extensions -Version 1.1.0
+    Install-Package Microsoft.Azure.WebJobs.Extensions.Storage -Version 5.0.1
 ```
-Install-Package Azure.Storage.Blobs -Version 12.13.0
-Install-Package Microsoft.Azure.Functions.Extensions -Version 1.1.0
-Install-Package Microsoft.Azure.WebJobs.Extensions.Storage -Version 5.0.1
-```
-It will look like as below :  
+After getting installed. It will look like as below :  
 
 ![6](https://user-images.githubusercontent.com/100709775/180198608-43ff33b5-a5e9-4ad5-a939-f29bbe069f73.PNG)
 
-
+---------------
 
 
 ## Step 2: Setup Blob Service Interface
@@ -102,6 +105,7 @@ The `IBlobService` looks likes as below :
         BlobContainerClient GetContainerClient(string blobContainerName);
     }
 ```
+------------
 
 ## Step 3: Implement Blob Service Interface
 
@@ -230,6 +234,8 @@ Here is the code as below :
 ```
 
 Server side is complete, run the azure function as see its working. 
+
+------------
 
 # Client Side Implementation
 
